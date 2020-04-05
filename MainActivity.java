@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
     static int[] born(int[] a) {
         for (int i = 0; i < a.length; i++) {
-            a[i] = (int)(8.5*Math.random()+1);
+            a[i] = (int)(24.5*Math.random()+1);
         }
         return a;
     }
@@ -113,24 +113,7 @@ public class MainActivity extends AppCompatActivity {
         fit = Math.abs((y - fit));
         return fit;
     }
-    public void onButton(View v){
-        EditText numA = (EditText)findViewById(R.id.numA);
-        EditText numB = (EditText)findViewById(R.id.numB);
-        EditText numC = (EditText)findViewById(R.id.numC);
-        EditText numD = (EditText)findViewById(R.id.numD);
-        EditText numY = (EditText)findViewById(R.id.numY);
-        TextView x1res = (TextView)findViewById(R.id.x1res);
-        TextView x2res = (TextView)findViewById(R.id.x2res);
-        TextView x3res = (TextView)findViewById(R.id.x3res);
-        TextView x4res = (TextView)findViewById(R.id.x4res);
-        TextView genNum = (TextView)findViewById(R.id.genNum);
-
-        a = Integer.parseInt(numA.getText().toString());
-        b = Integer.parseInt(numB.getText().toString());
-        c = Integer.parseInt(numC.getText().toString());
-        d = Integer.parseInt(numD.getText().toString());
-        y = Integer.parseInt(numY.getText().toString());
-
+    static int checkWinner(){
         int[] x1 = new int[len], x2 = new int[len], x3 = new int[len], x4 = new int[len];
         boolean stop = false;
         int[] winner = null;
@@ -167,10 +150,37 @@ public class MainActivity extends AppCompatActivity {
             }
             generationNumber++;
         }
-        x1res.setText(Integer.toString(winner[0]));
-        x2res.setText(Integer.toString(winner[1]));
-        x3res.setText(Integer.toString(winner[2]));
-        x4res.setText(Integer.toString(winner[3]));
-        genNum.setText(Integer.toString(generationNumber));
+        return generationNumber;
+    }
+    public void onButton(View v){
+        EditText numA = (EditText)findViewById(R.id.numA);
+        EditText numB = (EditText)findViewById(R.id.numB);
+        EditText numC = (EditText)findViewById(R.id.numC);
+        EditText numD = (EditText)findViewById(R.id.numD);
+        EditText numY = (EditText)findViewById(R.id.numY);
+        TextView x1res = (TextView)findViewById(R.id.x1res);
+        TextView genNum = (TextView)findViewById(R.id.genNum);
+
+        a = Integer.parseInt(numA.getText().toString());
+        b = Integer.parseInt(numB.getText().toString());
+        c = Integer.parseInt(numC.getText().toString());
+        d = Integer.parseInt(numD.getText().toString());
+        y = Integer.parseInt(numY.getText().toString());
+        int[] genArray = new int[90];
+        for (int i = 0; i < 90; i++){
+            genArray[i] = checkWinner();
+            mutchance = mutchance + 0.01;
+        }
+        int min = genArray[0];
+        int counter = 0;
+        for (int i = 0; i<genArray.length; i++) {
+            if (genArray[i]<min) {
+                min = genArray[i];
+                counter = i;
+            }
+        }
+        double bestMutation = 0.05 + ((double)counter)/100;
+        x1res.setText(Double.toString(bestMutation));
+        genNum.setText(Integer.toString(min));
     }
 }
